@@ -14,7 +14,7 @@ import (
 
 type connectionHandler struct {
 	client         Client
-	logger         logger                        // 日志管理
+	logger         Logger                        // 日志管理
 	messageHandler MessageHandler                // 消息处理
 	emitter        emitter[EventType, EventType] // 监听器
 	connFactory    ConnectionFactory             // 连接工厂
@@ -213,7 +213,7 @@ func (h *connectionHandler) ReadMessage(msg Message) {
 	h.messageHandler(h.client, msg)
 }
 
-func NewHandlerCore(logger logger, client Client, connFactory ConnectionFactory, handler MessageHandler, emitter emitter[EventType, EventType], paramFuncs ...WithOptionalHandler) *connectionHandler {
+func NewHandlerCore(logger Logger, client Client, connFactory ConnectionFactory, handler MessageHandler, emitter emitter[EventType, EventType], paramFuncs ...WithOptionalHandler) *connectionHandler {
 	c := &connectionHandler{
 		client:         client,
 		logger:         logger,

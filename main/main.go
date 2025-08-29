@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/fasthttp/websocket"
+	"go.uber.org/zap"
 	"libsocket"
 	"log"
 	"net/url"
@@ -15,8 +16,11 @@ import (
 
 func main() {
 	// Create logger
-	logger := libsocket.NewTestLogger(os.Stdout)
-
+	//logger := libsocket.NewTestLogger(os.Stdout)
+	logger, _ := zap.NewProduction()
+	defer logger.Sync() // flushes buffer, if any
+	sugar := logger.Sugar()
+	zapLogger := libsocket.NewLogger(sugar)
 	// Set up connection parameters
 	wsURL, _ := url.Parse("ws://127.0.0.1:8080/ws?token=demo")
 	params := libsocket.OpenConnectionParams{
@@ -27,7 +31,7 @@ func main() {
 	paramsGetter := func(ctx context.Context) (libsocket.OpenConnectionParams, error) {
 		return params, nil
 	}
-	paramsRepo := libsocket.NewOpenConnectionParamsRepo(logger, paramsGetter)
+	paramsRepo := libsocket.NewOpenConnectionParamsRepo(zapLogger, paramsGetter)
 
 	// Create WebSocket dialer
 	dialer := websocket.DefaultDialer
@@ -52,7 +56,7 @@ func main() {
 
 	// Create a connection factory with passive keep-alive support
 	connFactory := libsocket.NewWebsocketFactory(
-		logger,
+		zapLogger,
 		dialer,
 		paramsRepo,
 		libsocket.ErrorAdapters{},
@@ -65,7 +69,7 @@ func main() {
 	)
 
 	client := clientFactory(
-		logger,
+		zapLogger,
 		connFactory,
 		libsocket.WithReopenParam(libsocket.NewReOpenParam(true, time.NewTicker(60*time.Second))),
 		libsocket.WithHeartBeatParam(libsocket.NewDefaultHeartBeat()),

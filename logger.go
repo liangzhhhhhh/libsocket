@@ -1,8 +1,8 @@
 // 日志
 package libsocket
 
-type logger interface {
-	WithField(key string, value any) logger
+type Logger interface {
+	With(key string, value any) Logger
 	Debug(args ...any)
 	Debugf(format string, args ...any)
 	Debugln(args ...any)

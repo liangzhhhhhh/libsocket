@@ -33,5 +33,5 @@ type (
 
 	// ClientFactory 是客户端工厂方法
 	// 用于创建新的 Client 实例
-	ClientFactory func(logger logger, connFactory ConnectionFactory, params ...WithOptionalHandler) Client
+	ClientFactory func(logger Logger, connFactory ConnectionFactory, params ...WithOptionalHandler) Client
 )

@@ -8,7 +8,7 @@ type (
 	OpenConnectionParamsGetter func(ctx context.Context) (OpenConnectionParams, error)
 
 	OpenConnectionParamsRepo struct {
-		logger logger
+		logger Logger
 		getter OpenConnectionParamsGetter
 	}
 )
@@ -24,7 +24,7 @@ func (r OpenConnectionParamsRepo) Get(
 }
 
 func NewOpenConnectionParamsRepo(
-	logger logger,
+	logger Logger,
 	getter OpenConnectionParamsGetter,
 ) OpenConnectionParamsRepo {
 	return OpenConnectionParamsRepo{getter: getter, logger: logger}

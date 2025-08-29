@@ -13,14 +13,14 @@ type testLogger struct {
 }
 
 // NewTestLogger creates a new logger that writes to the provided writer
-func NewTestLogger(writer io.Writer) logger {
+func NewTestLogger(writer io.Writer) Logger {
 	return &testLogger{
 		writer: writer,
 		fields: make(map[string]any),
 	}
 }
 
-func (l *testLogger) WithField(key string, value any) logger {
+func (l *testLogger) With(key string, value any) Logger {
 	newLogger := &testLogger{
 		writer: l.writer,
 		fields: make(map[string]any),
@@ -29,7 +29,7 @@ func (l *testLogger) WithField(key string, value any) logger {
 	for k, v := range l.fields {
 		newLogger.fields[k] = v
 	}
-	newLogger.fields[key] = value
+	newLogger.fields[] = value
 	return newLogger
 }
 

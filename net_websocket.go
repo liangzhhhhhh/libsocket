@@ -36,7 +36,7 @@ type (
 	WsConnection struct {
 		errAdapters              ErrorAdapters
 		openConnectionParamsRepo openConnectionParamsRepo
-		logger                   logger
+		logger                   Logger
 		dialer                   *websocket.Dialer
 		conn                     *websocket.Conn
 		closeChan                CloseChan
@@ -55,7 +55,7 @@ var (
 func NewWebsocketConnection(
 	dialer *websocket.Dialer,
 	openParamsRepo OpenConnectionParamsRepo,
-	logger logger,
+	logger Logger,
 	recvChan chan<- Message,
 	errorHandlers ErrorAdapters,
 ) *WsConnection {
@@ -66,12 +66,12 @@ func NewWebsocketConnection(
 		recv:                     recvChan,
 		send:                     make(chan Message),
 		closeChan:                make(CloseChan),
-		logger:                   logger.WithField("net", "ws_connection"),
+		logger:                   logger.With("net", "ws_connection"),
 	}
 }
 
 func NewWebsocketFactory(
-	logger logger,
+	logger Logger,
 	dialer *websocket.Dialer,
 	openConnectionParamsRepo OpenConnectionParamsRepo,
 	errorHandlers ErrorAdapters,

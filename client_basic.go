@@ -21,7 +21,7 @@ type basicClient struct {
 	eventEmitter *EventEmitterCallback[EventType, EventType]
 }
 
-func (b *basicClient) createConnectionHandler(logger logger, connFactory ConnectionFactory, paramFuncs ...WithOptionalHandler) {
+func (b *basicClient) createConnectionHandler(logger Logger, connFactory ConnectionFactory, paramFuncs ...WithOptionalHandler) {
 	handlerWrapper := func(cli Client, m Message) {
 		if m.Type().IsData() {
 			b.messageHandler(cli, m)
@@ -72,7 +72,7 @@ func (b *basicClient) CloseChan() CloseChan {
 }
 
 func newBasicClient(
-	logger logger,
+	logger Logger,
 	connFactory ConnectionFactory,
 	messageHandler MessageHandler,
 	eventHandler EventHandler,
@@ -91,7 +91,7 @@ func NewBasicClientFactory(
 	messageHandler MessageHandler,
 	eventHandler EventHandler,
 ) ClientFactory {
-	return func(logger logger, connFactory ConnectionFactory, paramFuncs ...WithOptionalHandler) Client {
+	return func(logger Logger, connFactory ConnectionFactory, paramFuncs ...WithOptionalHandler) Client {
 		return newBasicClient(
 			logger,
 			connFactory,
